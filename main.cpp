@@ -10,7 +10,16 @@ int main()
 	cout << "Please input the number of barbershop's chairs:\n";
 	cin >> n;
 
-	BarberShop barberShop(10);
+	if (n <= 0)
+	{
+		n = 10;
+	}
+
+	cin.clear();
+	cin.sync();
+	cin.ignore();
+
+	BarberShop barberShop(n);
 	barberShop.start();
 	system("pause");
 }
