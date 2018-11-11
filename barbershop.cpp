@@ -46,7 +46,7 @@ void BarberShop::process()
 		else
 		{
 			// barber goes to work
-			cout << "Barber begins to work.\n";
+			cout << "Barber begins to work.(" << t << "s)\n";
 			unique_lock<mutex> lock(mtx);
 			if (cv.wait_for(lock, chrono::seconds(t), [this] { return !running; }))
 			{
