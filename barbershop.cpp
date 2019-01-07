@@ -16,6 +16,7 @@ void BarberShop::process()
 
 	while (running)
 	{
+		// get the next client
 		mtx.lock();
 		int t = -1;
 		if (clients.size())
@@ -25,7 +26,7 @@ void BarberShop::process()
 		}
 		mtx.unlock();
 
-		if (t == -1)
+		if (t == -1) // no next client
 		{
 			// barber goes to sleep
 			cout << "Barber goes to sleep.\n";
@@ -43,7 +44,7 @@ void BarberShop::process()
 				running = false;
 			}
 		}
-		else
+		else // next client exist
 		{
 			// barber goes to work
 			cout << "Barber begins to work.(" << t << "s)\n";
@@ -76,35 +77,42 @@ void BarberShop::addClient()
 		}
 		else
 		{
-			// add a client
+			// add a client, give a random time
 			cout << "Add a client.\n";
 			clients.push(rand() % 3 + 5);
 		}
 		mtx.unlock();
+
 		while (sleeping)
 		{
+			// try to wake up barber
 			sleeping = false;
 			cv.notify_one();
 		}
 		c = _getwch();
 	}
+	// that's the end of input
+
 	while (running)
 	{
+		// try to stop running to finish process()
 		running = false;
 		cv.notify_one();
 	}
 	while (sleeping)
 	{
+		// try to stop sleeping to finish process()
 		sleeping = false;
 		cv.notify_one();
 	}
 }
+
 void BarberShop::start()
 {
 	srand(time(NULL));
 
 	cout << "BarberShop is on, press Enter to add a client and press other key to stop.\n";
-	cout << "If barber sleeps over 60s, barbershop will be closed.\n";
+	cout << "If barber sleeps over 60s, barbershop will be closed.\n\n";
 
 	running = true;
 	sleeping = true;

@@ -13,7 +13,10 @@ int main()
 	if (n <= 0)
 	{
 		n = 10;
+		cout << "Invalid input, the number of barbershop's chairs will be set to 10.\n";
 	}
+
+	cout << endl;
 
 	cin.clear();
 	cin.sync();
